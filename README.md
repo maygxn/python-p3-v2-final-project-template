@@ -10,10 +10,10 @@ Our CLI app will refuse to create a new customer order if any fields are null.
 Our CLI app will refuse to create a new customer order if menu_item does not match items from table.
 
 # CRUD Actions
-![CRUDChart](CRUD.png)
+![UpdatedCRUD](<UPDATED CRUD.png>)
 
 # User Stories
-![UserStories](USTR.png)
+![UpdatedUS](image.png)
 
 # Kanban Board
 ![StarterKanBan](trelloboard.png)
