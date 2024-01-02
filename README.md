@@ -6,7 +6,8 @@ Description: A food ordering app for our restaurant Byte Size, however for the m
 
 
 # Description of Constraints
-
+Our CLI app will refuse to create a new customer order if any fields are null.
+Our CLI app will refuse to create a new customer order if menu_item does not match items from table.
 
 # CRUD Actions
 ![CRUDChart](CRUD.png)
