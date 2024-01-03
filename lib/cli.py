@@ -53,6 +53,7 @@ def view_menu():
 #     while True:
         
 def order_food():
+    current_order = []
     while True:
         view_menu()
         choice = input("Enter item number to order (0 to finish):")
@@ -62,9 +63,11 @@ def order_food():
         elif not choice.isdigit():
             print("Invalid input.")
             continue
-        elif choice == menu_items.item_number:
-            print(menu_items)
-            
+        else:
+            for item in menu_items:
+                if item.item_number == int(choice):
+                    current_order.append(item)
+                    print(f"You have successfully added {item.name} to your cart.")
 
 if __name__ == "__main__":
     main()
