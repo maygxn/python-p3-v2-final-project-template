@@ -4,5 +4,5 @@
 from models.__init__ import CONN, CURSOR
 import ipdb
 
-
+menu(cheeseburger, 10)
 ipdb.set_trace()
