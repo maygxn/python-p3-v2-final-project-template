@@ -5,6 +5,7 @@ from helpers import (
     exit_program,
     helper_1
 )
+current_order = []
 # create menu items
 menu_items = [
     Menu(1, "Loaded Jalapeno Cheese Bytes", 10),
@@ -49,6 +50,7 @@ def view_menu():
     print("0 - Back to Main Menu")
     for item in menu_items:
         print(f"{item.item_number} - {item.name}: ${item.price}")
+    print("98 - Remove an item")
     print("99 - View Cart")
 
 def view_cart(current_order):
@@ -58,9 +60,22 @@ def view_cart(current_order):
         print(f"{item.name} -- ${item.price}")
         total_price += item.price
     print(f"Total is ****${total_price}****")
-        
+
+
+def remove_item(current_order):
+    view_cart(current_order)
+    print("Enter the name of the item you want to remove:")
+    item_name = input("> ")
+    for item in current_order:
+        if item.name == item_name:
+            current_order.remove(item)
+            print(f"You have successfully removed {item.name} from your cart.")
+            view_cart(current_order)
+            return
+        print("Item not found in cart.")
+
 def order_food():
-    current_order = []
+    global curent_order
     while True:
         view_menu()
         choice = input("Enter item number to order (0 to finish):")
@@ -70,8 +85,11 @@ def order_food():
         elif not choice.isdigit():
             print("Invalid input.")
             continue
+        elif choice == "98":
+            remove_item(current_order)
         elif choice == "99":
             view_cart(current_order)
+            break
         else:
             for item in menu_items:
                 if item.item_number == int(choice):
