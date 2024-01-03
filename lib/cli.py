@@ -6,17 +6,17 @@ from helpers import (
 )
 # create menu items
 menu_items = [
-    Menu("Loaded Jalapeno Cheese Bytes", 10),
-    Menu("Baked Feta Bytes", 8),
-    Menu("Crab Cake Bytes",11),
-    Menu("Byte Smash Burger Combo",12),
-    Menu("Byte Smash Burger w/ Cheese Combo",13),
-    Menu("Spicy Chicken Sandwich Combo",11),
-    Menu("Chicken Tenders Combo",10),
-    Menu("Bacon Byte Burger Combo",14),
-    Menu("Southwest Salad",12),
-    Menu("Soft Drink",3),
-    Menu("Lemonade",3)
+    Menu(1, "Loaded Jalapeno Cheese Bytes", 10),
+    Menu(2, "Baked Feta Bytes", 8),
+    Menu(3, "Crab Cake Bytes",11),
+    Menu(4, "Byte Smash Burger Combo",12),
+    Menu(5, "Byte Smash Burger w/ Cheese Combo",13),
+    Menu(6, "Spicy Chicken Sandwich Combo",11),
+    Menu(7, "Chicken Tenders Combo",10),
+    Menu(8, "Bacon Byte Burger Combo",14),
+    Menu(9, "Southwest Salad",12),
+    Menu(10, "Soft Drink",3),
+    Menu(11, "Lemonade",3)
 ]
 
 def main():
@@ -26,7 +26,7 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
-            view_menu()
+            order_food()
         elif choice == "2":
             print("helper func 2 - order food")
         elif choice == "3":
@@ -45,9 +45,29 @@ def menu():
     print("4. Reorder")
 
 def view_menu():
-    print("Menu:")
+    print("Select Menu Item:")
+    print("0 - Back to Main Menu")
     for item in menu_items:
-        print(f"{item.name}: ${item.price}")
+        print(f"{item.item_number} - {item.name}: ${item.price}")
+    
+# def view_menu():
+#     print("Select Menu Item:")
+    
+#     while True:
+        
+def order_food():
+    while True:
+        view_menu()
+        choice = input("Enter item number to order (0 to finish):")
+    
+        if choice == "0":
+            break
+        elif not choice.isdigit():
+            print("Invalid input.")
+            continue
+        elif choice == menu_items.item_number:
+            print(menu_items)
+            
 
 if __name__ == "__main__":
     main()
