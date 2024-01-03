@@ -46,11 +46,15 @@ def view_menu():
     print("0 - Back to Main Menu")
     for item in menu_items:
         print(f"{item.item_number} - {item.name}: ${item.price}")
-    
-# def view_menu():
-#     print("Select Menu Item:")
-    
-#     while True:
+    print("99 - View Cart")
+
+def view_cart(current_order):
+    print("Your current order contains: ")
+    total_price = 0
+    for item in current_order:
+        print(f"{item.name} -- ${item.price}")
+        total_price += item.price
+    print(f"Total is ****${total_price}****")
         
 def order_food():
     current_order = []
@@ -63,6 +67,8 @@ def order_food():
         elif not choice.isdigit():
             print("Invalid input.")
             continue
+        elif choice == "99":
+            view_cart(current_order)
         else:
             for item in menu_items:
                 if item.item_number == int(choice):
