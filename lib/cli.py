@@ -61,11 +61,13 @@ def view_cart(current_order):
         total_price += item.price
     print(f"Total is ****${total_price}****")
     while True:
-        choice = input("Press 0 to complete order")
+        choice = input("Press '000' to complete order or any other key to continue ordering:")
         if choice == "0":
             Orders.create_table()
+            return True
         else:
             view_menu()
+            return False
 
 
 def remove_item(current_order):
@@ -84,7 +86,7 @@ def order_food():
     global curent_order
     while True:
         view_menu()
-        choice = input("Enter item number to order (0 to finish):")
+        choice = input("Enter item number to order (Enter 99 to view cart and to confirm order):")
     
         if choice == "0":
             break
@@ -94,8 +96,9 @@ def order_food():
         elif choice == "98":
             remove_item(current_order)
         elif choice == "99":
-            view_cart(current_order)
-            break
+            if view_cart(current_order):
+                break
+            
         else:
             for item in menu_items:
                 if item.item_number == int(choice):
