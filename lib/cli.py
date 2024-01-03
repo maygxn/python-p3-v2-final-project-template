@@ -22,6 +22,7 @@ menu_items = [
 ]
 
 def main():
+    Orders.create_table()
     order_history = Orders()
 
     while True:
@@ -62,8 +63,8 @@ def view_cart(current_order):
     print(f"Total is ****${total_price}****")
     while True:
         choice = input("Press '000' to complete order or any other key to continue ordering:")
-        if choice == "0":
-            Orders.create_table()
+        if choice == "000":
+            Orders.insert_order([item.name for item in current_order], total_price)
             return True
         else:
             view_menu()
@@ -110,7 +111,7 @@ def display_order_history(order_history):
     if history:
         for order in history:
             for item in order:
-                print(f"{item.name} -- ${item.price}")
+                print(f"{item.name} -- **${item.price}**")
     else:
         print("No orders have been placed.")
 

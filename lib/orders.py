@@ -1,5 +1,5 @@
 from models.__init__ import CURSOR, CONN
-
+import datetime
 class Orders:
     def __init__(self):
         self.orders = []
@@ -21,4 +21,13 @@ class Orders:
             )
         """
         CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def insert_order(cls, order_items, cost):
+        sql = """
+            INSERT INTO orders (date, order_items, cost)
+            VALUES (?, ?, ?)
+        """
+        CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost))
         CONN.commit()
