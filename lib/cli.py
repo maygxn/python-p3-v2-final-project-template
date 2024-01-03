@@ -1,5 +1,6 @@
 # lib/cli.py
 from menu_items import Menu
+from orders import Orders
 from helpers import (
     exit_program,
     helper_1
@@ -20,6 +21,8 @@ menu_items = [
 ]
 
 def main():
+    order_history = Orders()
+
     while True:
         menu()
         choice = input("> ")
@@ -28,7 +31,7 @@ def main():
         elif choice == "1":
             order_food()
         elif choice == "2":
-            print("helper func 2 - view order history")
+            display_order_history(order_history)
         elif choice == "3":
             print("Reorder")
         else:
@@ -74,6 +77,15 @@ def order_food():
                 if item.item_number == int(choice):
                     current_order.append(item)
                     print(f"You have successfully added {item.name} to your cart.")
+
+def display_order_history(order_history):
+    history = order_history.get_order_history()
+    if history:
+        for order in history:
+            for item in order:
+                print(f"{item.name} -- ${item.price}")
+    else:
+        print("No orders have been placed.")
 
 if __name__ == "__main__":
     main()
