@@ -60,6 +60,12 @@ def view_cart(current_order):
         print(f"{item.name} -- ${item.price}")
         total_price += item.price
     print(f"Total is ****${total_price}****")
+    while True:
+        choice = input("Press 0 to complete order")
+        if choice == "0":
+            Orders.create_table()
+        else:
+            view_menu()
 
 
 def remove_item(current_order):
