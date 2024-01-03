@@ -28,10 +28,8 @@ def main():
         elif choice == "1":
             order_food()
         elif choice == "2":
-            print("helper func 2 - order food")
+            print("helper func 2 - view order history")
         elif choice == "3":
-            print("helper func 3 - view order history")
-        elif choice == "4":
             print("Reorder")
         else:
             print("Invalid choice")
@@ -40,9 +38,8 @@ def menu():
     print("Please select an option:")
     print("0. Exit the program")
     print("1. View Menu")
-    print("2. Order Food")
-    print("3. View all orders")
-    print("4. Reorder")
+    print("2. View all orders")
+    print("3. Reorder")
 
 def view_menu():
     print("Select Menu Item:")
