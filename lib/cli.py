@@ -35,7 +35,7 @@ def main():
         elif choice == "2":
             display_order_history(order_history)
         elif choice == "3":
-            print("Reorder")
+            reorder(order_history)
         elif choice == "4":
             delete_order(order_history)
         else:
@@ -127,6 +127,26 @@ def delete_order(order_history):
         order_number = int(order_number)
         if order_history.delete_order(order_number):
             print(f"You have successfully deleted order number {order_number}.")
+        else:
+            print("Order not found.")
+    else:
+        print("Invalid input. Please enter a valid order number.")
+
+def reorder(order_history):
+    # need this here to display past orders
+    display_order_history(order_history)
+    print("Enter the order number you wish to reorder:")
+    order_number = input("> ")
+    if order_number.isdigit():
+        order_number = int(order_number)
+        order_items_str = order_history.get_specific_order(order_number)
+        if order_items_str:
+            # converting string back to a list
+            order_items = eval(order_items_str)
+            total_cost = sum(item.price for item in menu_items if item.name in order_items)
+            print(f"Reordering items: {order_items}, Total Cost: ${total_cost}")
+            Orders.insert_order(order_items, total_cost)
+            print("Your reorder has been successfully placed!")
         else:
             print("Order not found.")
     else:

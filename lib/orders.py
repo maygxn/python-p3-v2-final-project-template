@@ -25,6 +25,11 @@ class Orders:
         self.conn.commit()
         print(f"Order number {order_number} has been deleted.")
     
+    def get_specific_order(self, order_number):
+        self.cursor.execute("SELECT order_items FROM orders WHERE id = ?", (order_number,))
+        result = self.cursor.fetchone()
+        return result[0] if result else None
+    
     @classmethod
     def create_table(cls):
         sql = """
