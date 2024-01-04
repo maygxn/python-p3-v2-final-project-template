@@ -7,6 +7,18 @@ class Orders:
         self.conn = sqlite3.connect('company.db')
         self.cursor = self.conn.cursor()
 
+# ----- ORDER CONSTRAINTS------#
+    @property
+    def order_items(self):
+        return self._order_items
+
+    @order_items.setter
+    def order_items(self,value):
+        if value is None:
+            raise ValueError("Menu item cannot be null.")
+        self._order_items = value
+# ----- ORDER CONSTRAINTS------#
+
     def add_order(self, order):
         self.orders.append(order)
     

@@ -4,6 +4,7 @@ class Menu:
         self.name = name
         self.price = price
 
+# ----- Menu CONSTRAINTS------#
     @property
     def price(self):
         return self._price
@@ -17,3 +18,4 @@ class Menu:
         elif value < 0:
             raise ValueError("Price cannot be negative.")
         self._price = value
+# ----- Menu CONSTRAINTS------#
