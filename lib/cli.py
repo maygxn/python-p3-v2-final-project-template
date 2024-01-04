@@ -36,6 +36,8 @@ def main():
             display_order_history(order_history)
         elif choice == "3":
             print("Reorder")
+        elif choice == "4":
+            delete_order(order_history)
         else:
             print("Invalid choice")
 
@@ -45,6 +47,7 @@ def menu():
     print("1. View Menu")
     print("2. View all orders")
     print("3. Reorder")
+    print("4. Delete an order")
 
 def view_menu():
     print("Select Menu Item:")
@@ -65,6 +68,8 @@ def view_cart(current_order):
         choice = input("Press '000' to complete order or any other key to continue ordering:")
         if choice == "000":
             Orders.insert_order([item.name for item in current_order], total_price)
+            print("Your order has been successfully placed!")
+            current_order.clear()
             return True
         else:
             view_menu()
@@ -110,10 +115,22 @@ def display_order_history(order_history):
     history = order_history.get_order_history()
     if history:
         for order in history:
-            for item in order:
-                print(f"{item.name} -- **${item.price}**")
+            print(f"Order Number: {order[0]}, Order Date: {order[1]}, Order Items: {order[2]}, Cost: {order[3]}")
     else:
         print("No orders have been placed.")
+
+def delete_order(order_history):
+    display_order_history(order_history)
+    print("Enter the order number you want to delete:")
+    order_number = input("> ")
+    if order_number.isdigit():
+        order_number = int(order_number)
+        if order_history.delete_order(order_number):
+            print(f"You have successfully deleted order number {order_number}.")
+        else:
+            print("Order not found.")
+    else:
+        print("Invalid input. Please enter a valid order number.")
 
 if __name__ == "__main__":
     main()
