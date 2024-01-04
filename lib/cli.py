@@ -89,8 +89,24 @@ def remove_item(current_order):
             return
         print("Item not found in cart.")
 
+def get_or_create_customer():
+    print("Enter your email:")
+    email = input("> ")
+    CURSOR.execute("SELECT id FROM customers WHERE email = ?", (email,))
+    customer = CURSOR.fetchone()
+    if customer:
+        return customer[0]
+    else:
+        print("Enter your name:")
+        name = input("> ")
+        print("Enter your delivery address:")
+        address = input("> ")
+        Users.insert_customer(name, email, address)
+        return CURSOR.lastrowid
+
 def order_food():
     global curent_order
+    customer_id = get_or_create_customer()
     while True:
         view_menu()
         choice = input("Enter item number to order (Enter 99 to view cart and to confirm order):")
