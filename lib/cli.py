@@ -12,15 +12,15 @@ current_order = []
 menu_items = [
     Menu(1, "Loaded Jalapeno Cheese Bytes", 10),
     Menu(2, "Baked Feta Bytes", 8),
-    Menu(3, "Crab Cake Bytes",11),
-    Menu(4, "Byte Smash Burger Combo",12),
-    Menu(5, "Byte Smash Burger w/ Cheese Combo",13),
-    Menu(6, "Spicy Chicken Sandwich Combo",11),
-    Menu(7, "Chicken Tenders Combo",10),
-    Menu(8, "Bacon Byte Burger Combo",14),
-    Menu(9, "Southwest Salad",12),
-    Menu(10, "Soft Drink",3),
-    Menu(11, "Lemonade",3)
+    Menu(3, "Crab Cake Bytes", 11),
+    Menu(4, "Byte Smash Burger Combo", 12),
+    Menu(5, "Byte Smash Burger w/ Cheese Combo", 13),
+    Menu(6, "Spicy Chicken Sandwich Combo", 11),
+    Menu(7, "Chicken Tenders Combo", 10),
+    Menu(8, "Bacon Byte Burger Combo", 14),
+    Menu(9, "Southwest Salad", 12),
+    Menu(10, "Soft Drink", 3),
+    Menu(11, "Lemonade", 3)
 ]
 
 def main():
@@ -78,7 +78,6 @@ def view_cart(current_order):
             view_menu()
             return False
 
-
 def remove_item(current_order):
     view_cart(current_order)
     print("Enter the name of the item you want to remove:")
@@ -89,7 +88,7 @@ def remove_item(current_order):
             print(f"You have successfully removed {item.name} from your cart.")
             view_cart(current_order)
             return
-        print("Item not found in cart.")
+    print("Item not found in cart.")
 
 def get_or_create_customer():
     print("Enter your email:")
@@ -107,7 +106,7 @@ def get_or_create_customer():
         return CURSOR.lastrowid
 
 def order_food():
-    global curent_order
+    global current_order
     customer_id = get_or_create_customer()
     while True:
         view_menu()
