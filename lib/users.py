@@ -9,6 +9,9 @@ class Users:
 
     @classmethod
     def create_customer_table(cls):
+        # **** !!!! COMMENT OUT to persist, Uncomment to delete existing table contents !!! ****
+        # CURSOR.execute("DROP TABLE IF EXISTS customers")
+        # CONN.commit()
         sql = """
             CREATE TABLE IF NOT EXISTS customers (
                 id INTEGER PRIMARY KEY,
@@ -30,6 +33,3 @@ class Users:
 
 
 Users.create_customer_table()
-Users.insert_customer('Tyler','tyler@tyler.com','123 Tyler St')
-Users.insert_customer('Meagan','meagan@meagan.com','123 Meagan St')
-Users.insert_customer('Jenny','jenny@jenny.com','123 Jenny St')

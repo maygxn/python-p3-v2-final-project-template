@@ -69,7 +69,7 @@ def view_cart(current_order):
     while True:
         choice = input("Press '000' to complete order or any other key to continue ordering:")
         if choice == "000":
-            customer_id = 1
+            customer_id = get_or_create_customer()
             Orders.insert_order([item.name for item in current_order], total_price, customer_id)
             print("Your order has been successfully placed!")
             current_order.clear()
@@ -121,7 +121,6 @@ def order_food():
             remove_item(current_order)
         elif choice == "99":
             if view_cart(current_order):
-                Orders.insert_order([item.name for item in current_order], sum(item.price for item in current_order), customer_id)
                 current_order.clear()
                 break
             
