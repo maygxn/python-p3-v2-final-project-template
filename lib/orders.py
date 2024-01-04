@@ -49,7 +49,9 @@ class Orders:
             id INTEGER PRIMARY KEY,
             date DATE,
             order_items TEXT,
-            cost INT
+            cost INT,
+            customer_id INTEGER,
+            FOREIGN KEY (customer_id) REFERENCES customers(id)
             )
         """
         CURSOR.execute(sql)
