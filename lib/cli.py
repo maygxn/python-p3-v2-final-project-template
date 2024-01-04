@@ -54,7 +54,7 @@ def view_menu():
     print("0 - Back to Main Menu")
     for item in menu_items:
         print(f"{item.item_number} - {item.name}: ${item.price}")
-    print("98 - Remove an item")
+    print("98 - Remove an item from cart")
     print("99 - View Cart")
 
 def view_cart(current_order):
