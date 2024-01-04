@@ -44,6 +44,10 @@ class Orders:
     
     @classmethod
     def create_table(cls):
+        # **** !!!! COMMENT OUT to persist, Uncomment to delete existing table contents !!! ****
+        # CURSOR.execute("DROP TABLE IF EXISTS orders")
+        # CONN.commit()
+
         sql = """
             CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY,
@@ -58,10 +62,10 @@ class Orders:
         CONN.commit()
 
     @classmethod
-    def insert_order(cls, order_items, cost):
+    def insert_order(cls, order_items, cost, customer_id):
         sql = """
-            INSERT INTO orders (date, order_items, cost)
-            VALUES (?, ?, ?)
+            INSERT INTO orders (date, order_items, cost, customer_id)
+            VALUES (?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost))
+        CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost, customer_id))
         CONN.commit()

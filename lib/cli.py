@@ -67,7 +67,8 @@ def view_cart(current_order):
     while True:
         choice = input("Press '000' to complete order or any other key to continue ordering:")
         if choice == "000":
-            Orders.insert_order([item.name for item in current_order], total_price)
+            customer_id = 1
+            Orders.insert_order([item.name for item in current_order], total_price, customer_id)
             print("Your order has been successfully placed!")
             current_order.clear()
             return True
