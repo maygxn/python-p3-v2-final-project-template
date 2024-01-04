@@ -1,4 +1,6 @@
 # lib/cli.py
+from models.__init__ import CURSOR, CONN
+from users import Users
 from menu_items import Menu
 from orders import Orders
 from helpers import (
@@ -120,6 +122,8 @@ def order_food():
             remove_item(current_order)
         elif choice == "99":
             if view_cart(current_order):
+                Orders.insert_order([item.name for item in current_order], sum(item.price for item in current_order), customer_id)
+                current_order.clear()
                 break
             
         else:

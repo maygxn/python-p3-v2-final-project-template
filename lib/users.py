@@ -25,7 +25,7 @@ class Users:
         sql = """
             INSERT INTO customers (name, email, delivery_address) VALUES (?,?,?)
         """
-        CURSOR.execute(sql, (name, email,delivery_address))
+        CURSOR.execute(sql, (name, email, delivery_address))
         CONN.commit()
 
 
