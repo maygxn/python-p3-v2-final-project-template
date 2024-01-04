@@ -1,31 +1,32 @@
-from models.__init__ import CURSOR, CONN
 import datetime
+from models.__init__ import CURSOR, CONN
 import sqlite3
+
 class Orders:
     def __init__(self):
         self.orders = []
         self.conn = sqlite3.connect('company.db')
         self.cursor = self.conn.cursor()
 
-# ----- ORDER CONSTRAINTS------#
+    # ----- ORDER CONSTRAINTS------#
     @property
     def order_items(self):
         return self._order_items
 
     @order_items.setter
-    def order_items(self,value):
+    def order_items(self, value):
         if value is None:
             raise ValueError("Menu item cannot be null.")
         self._order_items = value
-# ----- ORDER CONSTRAINTS------#
+    # ----- ORDER CONSTRAINTS------#
 
     def add_order(self, order):
         self.orders.append(order)
-    
+
     def get_order_history(self):
         self.cursor.execute("SELECT * FROM orders")
         return self.cursor.fetchall()
-    
+
     def delete_order(self, order_number):
         # need this here to display list of previous orders
         print("Here are your current orders:")
@@ -36,28 +37,29 @@ class Orders:
         self.cursor.execute("DELETE FROM orders WHERE id = ?", (order_number,))
         self.conn.commit()
         print(f"Order number {order_number} has been deleted.")
-    
+
     def get_specific_order(self, order_number):
         self.cursor.execute("SELECT order_items FROM orders WHERE id = ?", (order_number,))
         result = self.cursor.fetchone()
         return result[0] if result else None
-    
+
     @classmethod
     def create_table(cls):
         # **** !!!! COMMENT OUT to persist, Uncomment to delete existing table contents !!! ****
-        # CURSOR.execute("DROP TABLE IF EXISTS orders")
-        # CONN.commit()
+        CURSOR.execute("DROP TABLE IF EXISTS orders")
+        CONN.commit()
 
         sql = """
             CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY,
-            date DATE,
-            order_items TEXT,
-            cost INT,
-            customer_id INTEGER,
-            FOREIGN KEY (customer_id) REFERENCES customers(id)
+                id INTEGER PRIMARY KEY,
+                date DATE,
+                order_items TEXT,
+                cost INT,
+                customer_id INTEGER,
+                FOREIGN KEY (customer_id) REFERENCES customers(id)
             )
         """
+        print(f"Executing SQL: {sql}")
         CURSOR.execute(sql)
         CONN.commit()
 

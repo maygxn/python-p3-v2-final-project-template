@@ -60,35 +60,30 @@ def view_menu():
     print("99 - View Cart")
 
 def view_cart(current_order):
-    print("Your current order contains: ")
+    print("Your current order contains:")
     total_price = 0
     for item in current_order:
         print(f"{item.name} -- ${item.price}")
         total_price += item.price
     print(f"Total is ****${total_price}****")
-    while True:
-        choice = input("Press '000' to complete order or any other key to continue ordering:")
-        if choice == "000":
-            customer_id = 1
-            Orders.insert_order([item.name for item in current_order], total_price, customer_id)
-            print("Your order has been successfully placed!")
-            current_order.clear()
-            return True
-        else:
-            view_menu()
-            return False
 
 def remove_item(current_order):
     view_cart(current_order)
-    print("Enter the name of the item you want to remove:")
-    item_name = input("> ")
-    for item in current_order:
-        if item.name == item_name:
-            current_order.remove(item)
-            print(f"You have successfully removed {item.name} from your cart.")
-            view_cart(current_order)
-            return
-    print("Item not found in cart.")
+    print("Enter the name of the item you want to remove (Enter '0' to go back):")
+    item_name = input("> ").lower()
+
+    if item_name == '0':
+        return
+
+    removed_items = [item for item in current_order if item.name.lower() == item_name]
+
+    if removed_items:
+        current_order = [item for item in current_order if item not in removed_items]
+        print(f"You have successfully removed {len(removed_items)} {item_name.capitalize()} from your cart.")
+    else:
+        print(f"No {item_name.capitalize()} found in cart.")
+
+    return current_order
 
 def get_or_create_customer():
     print("Enter your email:")
@@ -118,18 +113,29 @@ def order_food():
             print("Invalid input.")
             continue
         elif choice == "98":
-            remove_item(current_order)
+            current_order = remove_item(current_order)
         elif choice == "99":
-            if view_cart(current_order):
-                Orders.insert_order([item.name for item in current_order], sum(item.price for item in current_order), customer_id)
-                current_order.clear()
-                break
-            
+            view_cart(current_order)
+            current_order = confirm_order(current_order, customer_id)
         else:
             for item in menu_items:
                 if item.item_number == int(choice):
                     current_order.append(item)
                     print(f"You have successfully added {item.name} to your cart.")
+
+def confirm_order(current_order, customer_id):
+    view_cart(current_order)
+    print("Enter '000' to complete order, or any other key to continue ordering:")
+    choice = input("> ")
+    
+    if choice == "000":
+        Orders.insert_order([item.name for item in current_order], sum(item.price for item in current_order), customer_id)
+        print("Your order has been successfully placed!")
+        current_order = []  # Clear the current order
+        return current_order
+    else:
+        return current_order
+
 
 def display_order_history(order_history):
     history = order_history.get_order_history()
