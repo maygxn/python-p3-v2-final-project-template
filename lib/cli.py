@@ -197,13 +197,12 @@ def reorder(order_history):
     order_number = input("> ")
     if order_number.isdigit():
         order_number = int(order_number)
-        order_items_str = order_history.get_specific_order(order_number)
-        if order_items_str:
-            # converting string back to a list
-            order_items = eval(order_items_str)
+        order_details = order_history.get_specific_order(order_number)
+        if order_details:
+            order_items, customer_id = order_details
             total_cost = sum(item.price for item in menu_items if item.name in order_items)
             print(f"Reordering items: {order_items}, Total Cost: ${total_cost}")
-            Orders.insert_order(order_items, total_cost)
+            Orders.insert_order(order_items, total_cost, customer_id)
             print("Your reorder has been successfully placed!")
         else:
             print("Order not found.")
