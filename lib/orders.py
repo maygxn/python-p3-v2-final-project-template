@@ -4,7 +4,6 @@ import sqlite3
 
 class Orders:
     def __init__(self):
-        self.orders = []
         self.conn = sqlite3.connect('company.db')
         self.cursor = self.conn.cursor()
 
@@ -72,11 +71,17 @@ class Orders:
         CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost, customer_id))
         CONN.commit()
 
-    @classmethod
-    def update_order(cls, order_id, order_items, total_cost):
-        query = "UPDATE orders SET order_items=?, cost=? WHERE id=?"
-        CURSOR.execute(query, (", ".join(order_items), total_cost, order_id))
-        CONN.commit()
+    def update_order(self, order_number, updated_order_items, total_cost):
+        # Display the current order for confirmation
+        print("Updated Order:")
+        print(f"Order Number: {order_number}, Updated Order Items: {updated_order_items}, Updated Cost: {total_cost}")
 
-    def __del__(self):
-        self.conn.close()
+        # Update the order in the database
+        sql = """
+            UPDATE orders
+            SET order_items = ?, cost = ?
+            WHERE id = ?
+        """
+        self.cursor.execute(sql, (str(updated_order_items), total_cost, order_number))
+        self.conn.commit()
+        print("Order updated successfully.")

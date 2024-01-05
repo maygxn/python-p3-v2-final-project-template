@@ -26,7 +26,6 @@ menu_items = [
 def main():
     Orders.create_table()
     order_history = Orders()
-    current_order = []  # Move current_order inside the main loop
 
     while True:
         menu()
@@ -34,14 +33,14 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
-            order_food(current_order)
+            order_food()
         elif choice == "2":
             display_order_history(order_history)
         elif choice == "3":
             reorder(order_history)
         elif choice == "4":
             delete_order(order_history)
-        elif choice == "5":
+        elif choice == "5":  
             update_order(order_history)
         else:
             print("Invalid choice")
@@ -53,7 +52,7 @@ def menu():
     print("2. View all orders")
     print("3. Reorder")
     print("4. Delete an order")
-    print("5. Update placed order")
+    print ("5. Update placed order")
 
 def view_menu():
     print("Select Menu Item:")
@@ -82,52 +81,31 @@ def view_cart(current_order):
         view_menu()
         return False
 
-def remove_item(order_items):
-    view_cart(order_items)
+def remove_item(current_order):
+    view_cart(current_order)
     print("Enter the name of the item you want to remove (Enter '0' to go back):")
     item_name = input("> ").lower()
 
     if item_name == '0':
-        return order_items
+        return
 
-    for i, item in enumerate(order_items):
-        if isinstance(item, Menu) and item.name.lower() == item_name:
-            removed_item_name = order_items.pop(i).name
-            print(f"You have successfully removed {removed_item_name} from your order.")
-            break
-        elif isinstance(item, str) and item.lower() == item_name:
-            removed_item_name = order_items.pop(i)
-            print(f"You have successfully removed {removed_item_name} from your order.")
+    for i, item in enumerate(current_order):
+        if item.name.lower() == item_name:
+            removed_item = current_order.pop(i)
+            print(f"You have successfully removed {removed_item.name} from your cart.")
             break
     else:
-        print(f"No {item_name.capitalize()} found in order.")
+        print(f"No {item_name.capitalize()} found in cart.")
 
-    return order_items
-
+    return current_order
 
 def view_cart(current_order):
     print("Your current order contains:")
     total_price = 0
     for item in current_order:
-        if isinstance(item, Menu):
-            print(f"{item.name} -- ${item.price}")
-            total_price += item.price
-        elif isinstance(item, str):
-            print(f"{item} (Additional Item)")
+        print(f"{item.name} -- ${item.price}")
+        total_price += item.price
     print(f"Total is ****${total_price}****")
-
-    choice = input("Press '000' to complete order or any other key to continue ordering:")
-    if choice == "000":
-        customer_id = get_or_create_customer()
-        menu_items_names = [item.name if isinstance(item, Menu) else item for item in current_order]
-        Orders.insert_order(menu_items_names, total_price, customer_id)
-        print("Your order has been successfully placed!")
-        current_order.clear()
-        return True
-    else:
-        view_menu()
-        return False
-
 
 def get_or_create_customer():
     print("Enter your email:")
@@ -144,19 +122,20 @@ def get_or_create_customer():
         Users.insert_customer(name, email, address)
         return CURSOR.lastrowid
 
-def order_food(current_order):
+def order_food():
+    global current_order
     customer_id = get_or_create_customer()
     while True:
         view_menu()
         choice = input("Enter item number to order (Enter 99 to view cart and to confirm order):")
-
+    
         if choice == "0":
             break
         elif not choice.isdigit():
             print("Invalid input.")
             continue
         elif choice == "98":
-            current_order = remove_item_from_order(current_order)
+            current_order = remove_item(current_order)
         elif choice == "99":
             view_cart(current_order)
             current_order = confirm_order(current_order, customer_id)
@@ -178,6 +157,20 @@ def confirm_order(current_order, customer_id):
         return current_order
     else:
         return current_order
+
+def confirm_order(current_order, customer_id):
+    view_cart(current_order)
+    print("Enter '000' to complete order, or any other key to continue ordering:")
+    choice = input("> ")
+    
+    if choice == "000":
+        Orders.insert_order([item.name for item in current_order], sum(item.price for item in current_order), customer_id)
+        print("Your order has been successfully placed!")
+        current_order = []  # Clear the current order
+        return current_order
+    else:
+        return current_order
+
 
 def display_order_history(order_history):
     history = order_history.get_order_history()
@@ -219,6 +212,9 @@ def reorder(order_history):
     else:
         print("Invalid input. Please enter a valid order number.")
 
+if __name__ == "__main__":
+    main()
+
 def update_order(order_history):
     display_order_history(order_history)
     print("Enter the order number you want to update:")
@@ -227,36 +223,23 @@ def update_order(order_history):
     if order_number.isdigit():
         order_number = int(order_number)
         order_details = order_history.get_specific_order(order_number)
-        if order_details:
-            order_items, customer_id = order_details
 
+        if order_details:
+            print(f"Order Number: {order_details[0]}, Order Date: {order_details[1]}, Order Items: {order_details[2]}, Cost: {order_details[3]}")
+            current_order = order_details[2][:]  # Create a copy to avoid modifying the original list
+            
             while True:
                 print("1. Add item to order")
                 print("2. Remove item from order")
                 print("3. Finish updating order")
-                choice = input("> ")
+                choice = input("> ").lower()
 
                 if choice == "1":
-                    view_menu()
-                    item_number = input("Enter the item number to add to the order: ")
-                    if item_number.isdigit():
-                        item_number = int(item_number)
-                        selected_item = next((item for item in menu_items if item.item_number == item_number), None)
-                        if selected_item:
-                            # Convert order_items to a list if it's not already
-                            order_items = order_items if isinstance(order_items, list) else [order_items]
-                            order_items.append(selected_item.name)
-                            print(f"{selected_item.name} added to the order.")
-                        else:
-                            print("Invalid item number.")
-                    else:
-                        print("Invalid input. Please enter a valid item number.")
+                    current_order = add_item_to_order(current_order)
                 elif choice == "2":
-                    order_items = remove_item(order_items)
+                    current_order = remove_item_from_order(current_order)
                 elif choice == "3":
-                    total_cost = sum(item.price for item in menu_items if item.name in order_items)
-                    Orders.update_order(order_number, order_items, total_cost)
-                    print("Order updated successfully!")
+                    update_final_order(order_number, current_order)
                     break
                 else:
                     print("Invalid choice. Please enter a valid option.")
@@ -265,31 +248,54 @@ def update_order(order_history):
     else:
         print("Invalid input. Please enter a valid order number.")
 
-def remove_item_from_order(order_items):
-    view_cart(order_items)
+def add_item_to_order(existing_order_items):
+    while True:
+        view_menu()
+        print("Enter item number to add to the order (Enter 99 to view current order):")
+        choice = input("> ")
+
+        if choice == "99":
+            view_cart(existing_order_items)
+            continue
+
+        if choice.isdigit():
+            choice = int(choice)
+            for item in menu_items:
+                if item.item_number == choice:
+                    existing_order_items.append(item.name)
+                    print(f"You have successfully added {item.name} to the order.")
+                    break
+            else:
+                print("Invalid choice. Item not added to the order.")
+        else:
+            print("Invalid input. Please enter a valid item number or '99' to view the current order.")
+
+        another_item = input("Add another item? (yes/no): ").lower()
+        if another_item != "yes":
+            break
+
+    return existing_order_items
+
+def remove_item_from_order(existing_order_items):
+    view_cart(existing_order_items)
     print("Enter the name of the item you want to remove (Enter '0' to go back):")
     item_name = input("> ").lower()
 
     if item_name == '0':
-        return order_items
+        return existing_order_items
 
-    # Check if the item to remove is a menu item
-    selected_menu_item = next((item for item in menu_items if item.name.lower() == item_name), None)
-
-    if selected_menu_item:
-        updated_order_items = [item for item in order_items if item != selected_menu_item]
-        print(f"You have successfully removed {item_name.capitalize()} from your order.")
+    if item_name in existing_order_items:
+        existing_order_items.remove(item_name)
+        print(f"You have successfully removed {item_name} from the order.")
     else:
-        # If the item is not a menu item, check if it's a custom additional item
-        updated_order_items = [item for item in order_items if not (isinstance(item, str) and item.lower() == item_name)]
-        if len(updated_order_items) == len(order_items):
-            print(f"No {item_name.capitalize()} found in order.")
-        else:
-            print(f"You have successfully removed {item_name.capitalize()} from your order.")
+        print(f"No {item_name.capitalize()} found in the order.")
 
-    return updated_order_items
+    return existing_order_items
 
-
+def update_final_order(order_number, updated_order_items):
+    total_cost = sum(item.price for item in menu_items if item.name in updated_order_items)
+    Orders.update_order(order_number, updated_order_items, total_cost)
+    print("Order updated successfully.")
 
 if __name__ == "__main__":
     main()
