@@ -71,11 +71,21 @@ class Orders:
         CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost, customer_id))
         CONN.commit()
 
-    def update_order(self, order_number, updated_order_items, total_cost):
+    @classmethod
+    def update_order(cls, order_number, updated_order_items, total_cost):
         # Display the current order for confirmation
         print("Updated Order:")
         print(f"Order Number: {order_number}, Updated Order Items: {updated_order_items}, Updated Cost: {total_cost}")
 
+        # Update the order in the database
+        sql = """
+            UPDATE orders
+            SET order_items = ?, cost = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (str(updated_order_items), total_cost, order_number))
+        CONN.commit()
+        print("Order updated successfully.")
         # # Update the order in the database
         # sql = """
         #     UPDATE orders
@@ -86,4 +96,23 @@ class Orders:
         # self.conn.commit()
         # print("Order updated successfully.")
 
+def update_final_order(order_number, updated_order_items):
+    total_cost = sum(item.price for item in updated_order_items)
+    order_item_names = [item.name for item in updated_order_items]
+
+    # Display the updated order for confirmation
+    print("Updated Order:")
+    print(f"Order Number: {order_number}, Updated Order Items: {order_item_names}, Updated Cost: ${total_cost}")
+
+    # Update the order in the database
+    sql = """
+        UPDATE orders
+        SET order_items = ?, cost = ?
+        WHERE id = ?
+    """
+    CURSOR.execute(sql, (', '.join(order_item_names), total_cost, order_number))
+    CONN.commit()
+    print("Order updated successfully.")
+
+    return updated_order_items
 
