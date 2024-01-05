@@ -59,7 +59,7 @@ class Orders:
                 FOREIGN KEY (customer_id) REFERENCES customers(id)
             )
         """
-        print(f"Executing SQL: {sql}")
+        # print(f"Executing SQL: {sql}")  # Comment out or remove this line
         CURSOR.execute(sql)
         CONN.commit()
 
