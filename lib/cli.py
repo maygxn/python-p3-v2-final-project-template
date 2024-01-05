@@ -23,27 +23,6 @@ menu_items = [
     Menu(11, "Lemonade", 3)
 ]
 
-def main():
-    Orders.create_table()
-    order_history = Orders()
-
-    while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            order_food()
-        elif choice == "2":
-            display_order_history(order_history)
-        elif choice == "3":
-            reorder(order_history)
-        elif choice == "4":
-            delete_order(order_history)
-        elif choice == "5":  
-            update_order(order_history)
-        else:
-            print("Invalid choice")
 
 def menu():
     print("Please select an option:")
@@ -201,6 +180,7 @@ def reorder(order_history):
     if order_number.isdigit():
         order_number = int(order_number)
         order_details = order_history.get_specific_order(order_number)
+        print(order_details)    
         if order_details:
             order_items, customer_id = order_details
             total_cost = sum(item.price for item in menu_items if item.name in order_items)
@@ -212,8 +192,47 @@ def reorder(order_history):
     else:
         print("Invalid input. Please enter a valid order number.")
 
-if __name__ == "__main__":
-    main()
+# def update_order(order_history):
+#     order_number = int(input("Order number to update: "))
+#     new_items = input("Enter new items, comma-separated: ").split(', ')
+#     total_cost = sum(Menu.get_price(item) for item in new_items)  # Ensure Menu.get_price() is implemented
+#     order_history.update_order(order_number, new_items, total_cost)
+#     print(f"Order {order_number} updated.")
+
+
+
+# def update_order(order_history):
+#     display_order_history(order_history)
+#     print("Enter the order number you want to update:")
+#     order_number = input("> ")
+
+#     if order_number.isdigit():
+#         order_number = int(order_number)
+#         order_details = order_history.get_specific_order(order_number)
+
+#         if order_details:
+#             print(f"Order Number: {order_details[0]}, Order Date: {order_details[1]}, Order Items: {order_details[2]}, Cost: {order_details[3]}")
+#             current_order = order_details[2][:]  # Create a copy to avoid modifying the original list
+            
+#             while True:
+#                 print("1. Add item to order")
+#                 print("2. Remove item from order")
+#                 print("3. Finish updating order")
+#                 choice = input("> ").lower()
+
+#                 if choice == "1":
+#                     current_order = add_item_to_order(current_order)
+#                 elif choice == "2":
+#                     current_order = remove_item_from_order(current_order)
+#                 elif choice == "3":
+#                     update_final_order(order_number, current_order)
+#                     break
+#                 else:
+#                     print("Invalid choice. Please enter a valid option.")
+#         else:
+#             print("Order not found.")
+#     else:
+#         print("Invalid input. Please enter a valid order number.")
 
 def update_order(order_history):
     display_order_history(order_history)
@@ -224,9 +243,11 @@ def update_order(order_history):
         order_number = int(order_number)
         order_details = order_history.get_specific_order(order_number)
 
-        if order_details:
-            print(f"Order Number: {order_details[0]}, Order Date: {order_details[1]}, Order Items: {order_details[2]}, Cost: {order_details[3]}")
-            current_order = order_details[2][:]  # Create a copy to avoid modifying the original list
+        if order_details and len(order_details) == 3:
+            order_items, order_date, total_cost = order_details
+            print(f"Order Number: {order_number}, Order Date: {order_date}, Order Items: {order_items}, Cost: {total_cost}")
+            # Convert string of items back to a list if necessary
+            current_order = [item.strip() for item in order_items.split(',')] if isinstance(order_items, str) else order_items[:]
             
             while True:
                 print("1. Add item to order")
@@ -244,9 +265,10 @@ def update_order(order_history):
                 else:
                     print("Invalid choice. Please enter a valid option.")
         else:
-            print("Order not found.")
+            print("Order not found or incomplete order details.")
     else:
         print("Invalid input. Please enter a valid order number.")
+
 
 def add_item_to_order(existing_order_items):
     while True:
@@ -296,6 +318,29 @@ def update_final_order(order_number, updated_order_items):
     total_cost = sum(item.price for item in menu_items if item.name in updated_order_items)
     Orders.update_order(order_number, updated_order_items, total_cost)
     print("Order updated successfully.")
+
+
+def main():
+    Orders.create_table()
+    order_history = Orders()
+
+    while True:
+        menu()
+        choice = input("> ")
+        if choice == "0":
+            exit_program()
+        elif choice == "1":
+            order_food()
+        elif choice == "2":
+            display_order_history(order_history)
+        elif choice == "3":
+            reorder(order_history)
+        elif choice == "4":
+            delete_order(order_history)
+        elif choice == "5":  
+            update_order(order_history)
+        else:
+            print("Invalid choice")
 
 if __name__ == "__main__":
     main()

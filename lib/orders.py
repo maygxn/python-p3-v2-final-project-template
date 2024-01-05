@@ -76,12 +76,14 @@ class Orders:
         print("Updated Order:")
         print(f"Order Number: {order_number}, Updated Order Items: {updated_order_items}, Updated Cost: {total_cost}")
 
-        # Update the order in the database
-        sql = """
-            UPDATE orders
-            SET order_items = ?, cost = ?
-            WHERE id = ?
-        """
-        self.cursor.execute(sql, (str(updated_order_items), total_cost, order_number))
-        self.conn.commit()
-        print("Order updated successfully.")
+        # # Update the order in the database
+        # sql = """
+        #     UPDATE orders
+        #     SET order_items = ?, cost = ?
+        #     WHERE id = ?
+        # """
+        # self.cursor.execute(sql, (str(updated_order_items), total_cost, order_number))
+        # self.conn.commit()
+        # print("Order updated successfully.")
+
+
