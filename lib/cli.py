@@ -28,7 +28,7 @@ def main():
     order_history = Orders()
 
     while True:
-        print_menu()
+        menu()
         choice = input("> ")
         if choice == "0":
             exit_program()
@@ -88,11 +88,11 @@ def remove_item(current_order):
     if item_name == '0':
         return
 
-    removed_items = [item for item in current_order if item.name.lower() == item_name]
-
-    if removed_items:
-        current_order = [item for item in current_order if item not in removed_items]
-        print(f"You have successfully removed {len(removed_items)} {item_name.capitalize()} from your cart.")
+    for i, item in enumerate(current_order):
+        if item.name.lower() == item_name:
+            removed_item = current_order.pop(i)
+            print(f"You have successfully removed {removed_item.name} from your cart.")
+            break
     else:
         print(f"No {item_name.capitalize()} found in cart.")
 
