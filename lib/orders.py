@@ -71,3 +71,12 @@ class Orders:
         """
         CURSOR.execute(sql, (datetime.datetime.now(), str(order_items), cost, customer_id))
         CONN.commit()
+
+    @classmethod
+    def update_order(cls, order_id, order_items, total_cost):
+        query = "UPDATE orders SET order_items=?, cost=? WHERE id=?"
+        CURSOR.execute(query, (", ".join(order_items), total_cost, order_id))
+        CONN.commit()
+
+    def __del__(self):
+        self.conn.close()
